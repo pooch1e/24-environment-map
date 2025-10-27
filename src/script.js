@@ -22,6 +22,14 @@ gltfLoader.load('/models/FlightHelmet/glTF/FlightHelmet.gltf', (gltf) => {
   scene.add(gltf.scene);
 });
 
+scene.environmentIntensity = 1;
+scene.backgroundBlurriness = 0.2;
+scene.backgroundIntensity = 2;
+
+gui.add(scene, 'environmentIntensity').min(1).max(8).step(0.1);
+gui.add(scene, 'backgroundBlurriness').min(0.1).max(2).step(0.01);
+gui.add(scene, 'backgroundIntensity').min(1).max(2).step(0.001);
+
 const cubeTextureLoader = new THREE.CubeTextureLoader();
 const cubeMap = cubeTextureLoader.load([
   '/environmentMaps/0/px.png',
@@ -34,6 +42,7 @@ const cubeMap = cubeTextureLoader.load([
 
 // ENV MAPS
 //  LDR MAP
+scene.environment = cubeMap;
 scene.background = cubeMap;
 
 /**
@@ -41,7 +50,11 @@ scene.background = cubeMap;
  */
 const torusKnot = new THREE.Mesh(
   new THREE.TorusKnotGeometry(1, 0.4, 100, 16),
-  new THREE.MeshStandardMaterial()
+  new THREE.MeshStandardMaterial({
+    roughness: 0.3,
+    metalness: 1,
+    color: 0xaaaaaa,
+  })
 );
 torusKnot.position.y = 4;
 torusKnot.position.x = -5;
